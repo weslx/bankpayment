@@ -13,7 +13,7 @@ model CriarUsuario {
   id    Int     @id @default(autoincrement())
       nome String?
       sobrenome String?
-      cpf String?
+      cpf String? @unique
       cpnj String
-      email String?
+      email String? @unique
 }

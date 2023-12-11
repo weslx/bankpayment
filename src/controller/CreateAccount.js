@@ -24,10 +24,8 @@ class CreateAccount {
 
     const usuarioExistente = await prisma.criarUsuario.findUnique({
       where: {
-        where: {
-          email: email,
-          cpf: cpf,
-        },
+        email: email,
+        cpf: cpf,
       },
     });
 
