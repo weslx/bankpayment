@@ -22,7 +22,7 @@ class CreateAccount {
 
     const { nome, sobrenome, cpf, cnpj, email, senha } = req.body;
 
-    const usuarioExistente = await prisma.criarUsuario.findUnique({
+    const usuarioExistente = await prisma.criarusuario.findUnique({
       where: {
         email: email,
         cpf: cpf,
@@ -32,9 +32,9 @@ class CreateAccount {
     if (usuarioExistente) {
       return res.status(409).json("Usuario existe");
     }
-
+    console.log(nome, sobrenome, cpf, cnpj, email, senha);
     try {
-      const usuariocriado = await prisma.criarUsuario.create({
+      const usuariocriado = await prisma.criarusuario.create({
         data: {
           nome: nome,
           sobrenome: sobrenome,
@@ -44,6 +44,7 @@ class CreateAccount {
           senha: senha,
         },
       });
+      return res.status(200).json({ message: "Usuario Criado", usuariocriado });
     } catch (error) {
       return res.status(400).json(error);
     }

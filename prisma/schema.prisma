@@ -9,11 +9,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model CriarUsuario {
+model criarusuario {
   id    Int     @id @default(autoincrement())
       nome String?
       sobrenome String?
       cpf String? @unique
-      cpnj String
+      cnpj String
       email String? @unique
+      senha String?
 }
