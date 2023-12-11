@@ -1,10 +1,7 @@
 import express from "express";
-import router from "./routes/routes.js";
+import app from "./app.js";
 
-const app = express();
 const port = 3000;
-
-app.use(router);
 
 app.listen(port, () => {
   console.log(`Running on http://localhost:${port}`);

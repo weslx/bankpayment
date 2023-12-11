@@ -6,11 +6,12 @@ const prisma = new PrismaClient();
 class CreateAccount {
   async store(req, res) {
     const schema = Yup.object().shape({
-      nome: Yup.string().required,
-      sobrenome: Yup.string().required,
-      cpf: Yup.string().required,
-      cnpj: Yup.string().notRequired,
-      email: Yup.string().required,
+      nome: Yup.string().required(),
+      sobrenome: Yup.string().required(),
+      cpf: Yup.string().required(),
+      cnpj: Yup.string().notRequired(),
+      email: Yup.string().required(),
+      senha: Yup.string().required(),
     });
 
     try {
@@ -19,7 +20,7 @@ class CreateAccount {
       return res.status(400).json(error);
     }
 
-    const { nome, sobrenome, cpf, cnpj, email } = req.body;
+    const { nome, sobrenome, cpf, cnpj, email, senha } = req.body;
 
     const usuarioExistente = await prisma.criarUsuario.findUnique({
       where: {
@@ -30,6 +31,10 @@ class CreateAccount {
       },
     });
 
+    if (usuarioExistente) {
+      return res.status(409).json("Usuario existe");
+    }
+
     try {
       const usuariocriado = await prisma.criarUsuario.create({
         data: {
@@ -38,6 +43,7 @@ class CreateAccount {
           cpf: cpf,
           cnpj: cnpj,
           email: email,
+          senha: senha,
         },
       });
     } catch (error) {
@@ -45,3 +51,5 @@ class CreateAccount {
     }
   }
 }
+
+export default new CreateAccount();
