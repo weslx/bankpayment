@@ -14,7 +14,7 @@ model criarusuario {
       nome String?
       sobrenome String?
       cpf String? @unique
-      cnpj String
+      cnpj String @default("")
       email String? @unique
       senha String?
 }

@@ -15,24 +15,29 @@ class CreateAccount {
     });
 
     try {
-      await schema.isValid(req.body, { abortEarly: true });
+      await schema.validate(req.body, { abortEarly: true });
     } catch (error) {
-      return res.status(400).json(error);
+      return res.status(400).json({ error: error.errors });
     }
 
     const { nome, sobrenome, cpf, cnpj, email, senha } = req.body;
 
-    const usuarioExistente = await prisma.criarusuario.findUnique({
+    const emailExistente = await prisma.criarusuario.findUnique({
       where: {
         email: email,
+      },
+    });
+
+    const cpfExistente = await prisma.criarusuario.findUnique({
+      where: {
         cpf: cpf,
       },
     });
 
-    if (usuarioExistente) {
-      return res.status(409).json("Usuario existe");
+    if (emailExistente || cpfExistente) {
+      return res.status(409).json("Este usuario ja existe, tente fazer login");
     }
-    console.log(nome, sobrenome, cpf, cnpj, email, senha);
+
     try {
       const usuariocriado = await prisma.criarusuario.create({
         data: {
