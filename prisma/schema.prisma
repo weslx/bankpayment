@@ -11,18 +11,20 @@ datasource db {
 
 model users {
   id    Int     @id @default(autoincrement())
-  nome String?
-  sobrenome String?
-  cpf String? @unique
-  cnpj String @default("")
-  email String? @unique
-  senha String?
+  nome String
+  sobrenome String
+  NomeLoja String? 
+  cpf String @unique
+  cnpj String? 
+  email String @unique
+  senha String
+  status String? @default("Usuario")
   infousuario infousuario[]
 }
 
 model infousuario {
   id Int @id @default(autoincrement())
   userId Int
-  saldo Float? @default(0)
+  saldo Float @default(0)
   user users @relation(fields: [userId], references: [id])
 }
