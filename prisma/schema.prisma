@@ -9,12 +9,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model criarusuario {
+model users {
   id    Int     @id @default(autoincrement())
-      nome String?
-      sobrenome String?
-      cpf String? @unique
-      cnpj String @default("")
-      email String? @unique
-      senha String?
+  nome String?
+  sobrenome String?
+  cpf String? @unique
+  cnpj String @default("")
+  email String? @unique
+  senha String?
+  infousuario infousuario[]
+}
+
+model infousuario {
+  id Int @id @default(autoincrement())
+  userId Int
+  saldo Float? @default(0)
+  user users @relation(fields: [userId], references: [id])
 }

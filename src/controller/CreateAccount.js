@@ -22,13 +22,18 @@ class CreateAccount {
 
     const { nome, sobrenome, cpf, cnpj, email, senha } = req.body;
 
-    const emailExistente = await prisma.criarusuario.findUnique({
+    if (cpf.length === 11) {
+    } else {
+      return res.status(400).json("Cpf invalido");
+    }
+
+    const emailExistente = await prisma.users.findUnique({
       where: {
         email: email,
       },
     });
 
-    const cpfExistente = await prisma.criarusuario.findUnique({
+    const cpfExistente = await prisma.users.findUnique({
       where: {
         cpf: cpf,
       },
@@ -39,7 +44,7 @@ class CreateAccount {
     }
 
     try {
-      const usuariocriado = await prisma.criarusuario.create({
+      const usuariocriado = await prisma.users.create({
         data: {
           nome: nome,
           sobrenome: sobrenome,
@@ -52,6 +57,8 @@ class CreateAccount {
       return res.status(200).json({ message: "Usuario Criado", usuariocriado });
     } catch (error) {
       return res.status(400).json(error);
+    } finally {
+      await prisma.$disconnect();
     }
   }
 }
