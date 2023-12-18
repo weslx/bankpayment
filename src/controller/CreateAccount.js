@@ -54,6 +54,11 @@ class CreateAccount {
           senha: senha,
         },
       });
+      await prisma.infousuario.create({
+        data: {
+          userId: usuariocriado.id,
+        },
+      });
       return res.status(200).json({ message: "Usuario Criado", usuariocriado });
     } catch (error) {
       return res.status(400).json(error);

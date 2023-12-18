@@ -10,16 +10,23 @@ class InfoUsers {
       where: {
         cpf: cpf,
       },
-    });
-
-    const depositar = await prisma.infousuario.create({
-      data: {
-        userId: usuario.id,
-        saldo: saldo,
+      include: {
+        infousuario: true,
       },
     });
 
-    return res.status(200).json("sucesso" + depositar);
+    const novoSaldo = usuario.infousuario[0].saldo + saldo;
+
+    await prisma.infousuario.update({
+      where: {
+        id: usuario.infousuario[0].id,
+      },
+      data: {
+        saldo: novoSaldo,
+      },
+    });
+
+    return res.status(200).json("sucesso");
   }
 }
 
