@@ -7,8 +7,11 @@
 <h3 align="center">API de Pagamentos</h3>
 
 <div align="center">
-  [![Status](https://img.shields.io/badge/status-active-success.svg)]()
+
+[![Status](https://img.shields.io/badge/status-active-success.svg)]()
+
 </div>
+
 
 ---
 
@@ -23,10 +26,8 @@
 - [Implantação](#implantacao)
 - [Uso](#uso)
 - [Construído Usando](#construido-usando)
-- [TODO](../TODO.md)
-- [Contribuições](../CONTRIBUTING.md)
 - [Autores](#autores)
-- [Agradecimentos](#agradecimentos)
+
 
 ## 🧐 Sobre <a name = "sobre"></a>
 
