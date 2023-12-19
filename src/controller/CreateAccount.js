@@ -1,5 +1,7 @@
 import * as Yup from "yup";
 import { PrismaClient } from "@prisma/client";
+import jwt from "jsonwebtoken";
+const JWTSECRET = process.env.JWT_SECRET;
 
 const prisma = new PrismaClient();
 
@@ -54,12 +56,19 @@ class CreateAccount {
           senha: senha,
         },
       });
+
+      const token = jwt.sign({ id: usuariocriado.id }, JWTSECRET, {
+        expiresIn: 300,
+      });
+
       await prisma.infousuario.create({
         data: {
           userId: usuariocriado.id,
+          SessionToken: token,
         },
       });
-      return res.status(200).json({ message: "Usuario Criado", usuariocriado });
+
+      return res.status(200).json({ message: "Usuario Criado", token });
     } catch (error) {
       return res.status(400).json(error);
     } finally {

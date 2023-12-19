@@ -24,7 +24,8 @@ model users {
 
 model infousuario {
   id Int @id @default(autoincrement())
-  userId Int
+  userId Int @unique
   saldo Float @default(0)
   user users @relation(fields: [userId], references: [id])
+  SessionToken String @unique
 }
