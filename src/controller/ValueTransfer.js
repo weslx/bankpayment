@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
+
 class TransferValue {
   async send(req, res) {
     const { token, CpfReceber, valor } = req.body;
@@ -24,6 +25,11 @@ class TransferValue {
       },
     });
 
+    if (UserTransferExiste.status === "Lojista") {
+      return res
+        .status(400)
+        .json("Este usuario e lojista e nao pode transferir dinheiro");
+    }
     if (UserTransferExiste.cpf === CpfReceber) {
       return res
         .status(400)
@@ -48,23 +54,29 @@ class TransferValue {
         .json("Saldo insuficiente para realizar a transferência");
     }
 
-    await prisma.infousuario.update({
-      where: {
-        id: UserTransferExiste.infousuario[0].id,
-      },
-      data: {
-        saldo: UserTransferExiste.infousuario[0].saldo - valor,
-      },
-    });
+    const transferencia = await prisma.$transaction([
+      prisma.infousuario.update({
+        where: {
+          id: UserTransferExiste.infousuario[0].id,
+        },
+        data: {
+          saldo: UserTransferExiste.infousuario[0].saldo - valor,
+        },
+      }),
+      prisma.infousuario.update({
+        where: {
+          id: UserReceberExiste.infousuario[0].id,
+        },
+        data: {
+          saldo: UserReceberExiste.infousuario[0].saldo + valor,
+        },
+      }),
+    ]);
 
-    await prisma.infousuario.update({
-      where: {
-        id: UserReceberExiste.infousuario[0].id,
-      },
-      data: {
-        saldo: UserReceberExiste.infousuario[0].saldo + valor,
-      },
-    });
+    if (!transferencia) {
+      throw new Error("Falha na transferência");
+    }
+
     return res.status(200).json("Transferência realizada com sucesso");
   }
 }
