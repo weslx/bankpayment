@@ -5,27 +5,14 @@ const prisma = new PrismaClient();
 
 class UserStatus {
   async update(req, res) {
-    const schema = Yup.object().shape({
-      cpf: Yup.string().required(),
-      email: Yup.string().required(),
-      cnpj: Yup.string().required(),
-      senha: Yup.string().required(),
-      NomeLoja: Yup.string().required(),
-    });
+    const { cnpj, NomeLoja, token } = req.body;
 
-    try {
-      await schema.validate(req.body, { abortEarly: true });
-    } catch (error) {
-      return res.status(400).json({ error: error.errors });
-    }
-    const { cpf, email, cnpj, senha, NomeLoja } = req.body;
+    const idUsuario = token.id;
 
     try {
       const usuarioAtualizado = await prisma.users.update({
         where: {
-          cpf: cpf,
-          email: email,
-          senha: senha,
+          id: idUsuario,
         },
         data: {
           NomeLoja: NomeLoja,

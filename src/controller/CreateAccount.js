@@ -58,7 +58,7 @@ class CreateAccount {
       });
 
       const token = jwt.sign({ id: usuariocriado.id }, JWTSECRET, {
-        expiresIn: 300,
+        expiresIn: 30000,
       });
 
       await prisma.infousuario.create({

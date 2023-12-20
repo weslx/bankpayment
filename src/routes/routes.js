@@ -11,7 +11,7 @@ const routes = new Router();
 routes.post("/criarusuario", CreateAccount.store);
 routes.post("/login", LoginAccount.login);
 routes.post("/depositar", VerificarToken, InfoUsers.store);
-routes.post("/mudar-status", VerificarToken, UpdateUserStatus.update);
+routes.put("/mudar-status", VerificarToken, UpdateUserStatus.update);
 routes.post("/transferencia", VerificarToken, ValueTransfer.send);
 
 routes.get("/", (req, res) => {

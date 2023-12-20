@@ -3,17 +3,13 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 class TransferValue {
   async send(req, res) {
-    const { CpfTransfer, CpfReceber, valor } = req.body;
+    const { token, CpfReceber, valor } = req.body;
 
-    if (CpfTransfer === CpfReceber) {
-      return res
-        .status(400)
-        .json("Não é possível transferir dinheiro para o mesmo CPF");
-    }
+    const idUsuario = token.id;
 
     const UserTransferExiste = await prisma.users.findUnique({
       where: {
-        cpf: CpfTransfer,
+        id: idUsuario,
       },
       include: {
         infousuario: true,
@@ -28,10 +24,16 @@ class TransferValue {
       },
     });
 
+    if (UserTransferExiste.cpf === CpfReceber) {
+      return res
+        .status(400)
+        .json("Não é possível transferir dinheiro para o mesmo CPF");
+    }
+
     if (!UserTransferExiste) {
       return res
         .status(400)
-        .json("Usuario com este cpf nao existe " + CpfTransfer);
+        .json("Usuario com este cpf nao existe " + UserTransferExiste.cpf);
     }
 
     if (!UserReceberExiste) {
