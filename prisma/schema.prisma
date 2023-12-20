@@ -20,6 +20,7 @@ model users {
   senha String
   status String? @default("Usuario")
   infousuario infousuario[]
+  infotelegram infotelegram?
 }
 
 model infousuario {
@@ -28,4 +29,15 @@ model infousuario {
   saldo Float @default(0)
   user users @relation(fields: [userId], references: [id])
   SessionToken String @unique
+}
+
+model infotelegram {
+  id Int @id @default(autoincrement())
+  chatId Int? @unique
+  nome String ?
+  sobrenome String?
+  username String?
+  Tag String? @unique
+  userId Int @unique
+  user users @relation(fields: [userId], references: [id])
 }

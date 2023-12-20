@@ -68,6 +68,12 @@ class CreateAccount {
         },
       });
 
+      await prisma.infotelegram.create({
+        data: {
+          userId: usuariocriado.id,
+        },
+      });
+
       return res.status(200).json({ message: "Usuario Criado", token });
     } catch (error) {
       return res.status(400).json(error);
