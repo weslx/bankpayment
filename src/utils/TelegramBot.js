@@ -36,26 +36,79 @@ class BotTelegram {
     }
     if (message.text.startsWith("/codigo")) {
       const codigo = message.text.slice("/codigo".length).trim();
-      console.log(message.chat.id);
+
       const ChecarCodigo = await prisma.infotelegram.findUnique({
         where: {
-          Tag: codigo,
+          tag: codigo,
+        },
+        include: {
+          user: {
+            select: {
+              id: true,
+              email: true,
+            },
+          },
         },
       });
+
+      const chatid = message.from.id;
+      console.log(chatid);
+      const chatidString = chatid.toString();
+      console.log(chatidString);
+
       if (!ChecarCodigo) {
         await axios.post(`${TELEGRAM_API}/sendMessage`, {
           chat_id: message.chat.id,
           text: "Erro, esse codigo nao existe",
         });
-      } else {
+        return res.send();
+      }
+
+      try {
+        if (ChecarCodigo.verificado === 1) {
+          if (chatidString === ChecarCodigo.chatId) {
+            await axios.post(`${TELEGRAM_API}/sendMessage`, {
+              chat_id: message.chat.id,
+              text: `Voce ja vinculou esse codigo em sua conta`,
+            });
+            return res.send();
+          }
+        }
+
+        if (chatidString !== ChecarCodigo.chatId) {
+          await axios.post(`${TELEGRAM_API}/sendMessage`, {
+            chat_id: message.chat.id,
+            text: `Esse codigo ja foi registrado por outra pessoa`,
+          });
+          return res.send();
+        }
+
+        await prisma.infotelegram.update({
+          where: {
+            tag: codigo,
+          },
+          data: {
+            chatId: chatidString,
+            nome: message.from.first_name,
+            sobrenome: message.from.last_name,
+            username: message.from.username || null,
+            verificado: 1,
+          },
+        });
+
         await axios.post(`${TELEGRAM_API}/sendMessage`, {
           chat_id: message.chat.id,
-          text: "Codigo recebido com sucesso",
+          text: `Telegram registrado com sucesso no email, ${ChecarCodigo.user.email}`,
+        });
+      } catch (error) {
+        console.log(error);
+        await axios.post(`${TELEGRAM_API}/sendMessage`, {
+          chat_id: message.chat.id,
+          text: error,
         });
       }
+      return res.send();
     }
-
-    return res.send();
   }
 }
 
