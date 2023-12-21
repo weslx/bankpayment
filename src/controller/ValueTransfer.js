@@ -25,6 +25,16 @@ class TransferValue {
       },
     });
 
+    if (!UserTransferExiste) {
+      return res.status(400).json("Seu usuario nao existe");
+    }
+
+    if (!UserReceberExiste) {
+      return res
+        .status(400)
+        .json("Usuario que voce deseja enviar o dinheiro nao existe");
+    }
+
     if (UserTransferExiste.status === "Lojista") {
       return res
         .status(400)
@@ -34,18 +44,6 @@ class TransferValue {
       return res
         .status(400)
         .json("Não é possível transferir dinheiro para o mesmo CPF");
-    }
-
-    if (!UserTransferExiste) {
-      return res
-        .status(400)
-        .json("Usuario com este cpf nao existe " + UserTransferExiste.cpf);
-    }
-
-    if (!UserReceberExiste) {
-      return res
-        .status(400)
-        .json("Usuario que voce deseja enviar o dinheiro nao existe");
     }
 
     if (UserTransferExiste.infousuario[0].saldo < valor) {
