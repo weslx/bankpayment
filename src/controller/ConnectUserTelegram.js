@@ -23,14 +23,14 @@ class ConnectTelegram {
       res.status(400).json("Usuario nao encontrado");
     }
 
-    const tagExiste = userExiste.infotelegram.Tag;
+    const tagExiste = userExiste.infotelegram.tag;
 
     const SetarCodigo = await prisma.infotelegram.update({
       where: {
         userId: userExiste.id,
       },
       data: {
-        Tag: codigo,
+        tag: "codigo",
       },
     });
 
