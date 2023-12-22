@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import BotTelegram from "../utils/TelegramBot.js";
 
 const prisma = new PrismaClient();
 
@@ -22,6 +23,7 @@ class TransferValue {
       },
       include: {
         infousuario: true,
+        infotelegram: true,
       },
     });
 
@@ -70,7 +72,11 @@ class TransferValue {
         },
       }),
     ]);
+    const texto =
+      "Voce acabou de receber uma transferencia no valor de " + valor;
 
+    const chatid = UserReceberExiste;
+    console.log(chatid);
     if (!transferencia) {
       throw new Error("Falha na transferência");
     }

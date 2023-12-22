@@ -2,7 +2,6 @@ import { PrismaClient } from "@prisma/client";
 import BotTelegram from "../utils/TelegramBot.js";
 
 const prisma = new PrismaClient();
-const bot = new BotTelegram();
 
 class InfoUsers {
   async store(req, res) {
