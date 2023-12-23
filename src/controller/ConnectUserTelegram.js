@@ -30,7 +30,7 @@ class ConnectTelegram {
         userId: userExiste.id,
       },
       data: {
-        tag: "codigo",
+        tag: codigo,
       },
     });
 

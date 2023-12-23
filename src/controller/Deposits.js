@@ -1,5 +1,4 @@
 import { PrismaClient } from "@prisma/client";
-import BotTelegram from "../utils/TelegramBot.js";
 
 const prisma = new PrismaClient();
 
@@ -7,7 +6,6 @@ class InfoUsers {
   async store(req, res) {
     const { saldo, token } = req.body;
 
-    bot.NotificaTransfer(req, res);
     const idUsuario = token.id;
 
     const usuario = await prisma.users.findUnique({
