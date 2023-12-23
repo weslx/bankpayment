@@ -7,28 +7,34 @@ dotenv.config();
 const prisma = new PrismaClient();
 const bot = new Telegraf(process.env.TELEGRAM_TOKEN);
 
-bot.telegram.setWebhook(
-  `${process.env.SERVER_URL}/webhook/${process.env.TELEGRAM_TOKEN}`
-);
+const SERVER_URL = process.env.SERVER_URL;
+const TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN;
 
-bot.start((ctx) =>
+bot.telegram.setWebhook(`${SERVER_URL}/webhook/${TELEGRAM_TOKEN}`);
+
+bot.start((ctx) => {
   ctx.reply(
-    "Bem vindo ao bot de notificaçoes de transaçoes bancarias, escreva /help para ajuda",
-    Markup.inlineKeyboard([
-      Markup.button.callback("Help", "HELP"),
-      Markup.button.callback("Código", "CODIGO"),
-    ])
-  )
-);
+    "🎉Bem-vindo ao bot de notificações de transações bancárias!🎉\n\nPor favor, clique no botão 'Código' abaixo e em seguida, insira o código que você recebeu.",
+    Markup.inlineKeyboard([Markup.button.callback("🔑 Código", "CODIGO")])
+  );
+});
 
-bot.action("HELP", (ctx) =>
-  ctx.reply(
-    "Para receber notificações de futuras transaçoes, escreva: /codigo (Codigo que voce recebeu do site)"
-  )
-);
+let EsperandoCodigo = false;
 
-bot.action("CODIGO", async (ctx) => {
-  const codigo = ctx.message.text.slice("/codigo".length).trim();
+export async function notificar(chatId, texto) {
+  await bot.sendMessage(chatId, texto);
+}
+
+bot.action("CODIGO", (ctx) => {
+  ctx.reply("Por favor, insira o seu código:");
+  EsperandoCodigo = true;
+});
+
+bot.use(async (ctx) => {
+  if (!EsperandoCodigo) return;
+
+  const codigo = ctx.message.text.trim();
+  EsperandoCodigo = false;
 
   const ChecarCodigo = await prisma.infotelegram.findUnique({
     where: {
@@ -57,7 +63,7 @@ bot.action("CODIGO", async (ctx) => {
       return;
     }
 
-    if (chatidString !== ChecarCodigo.chatId) {
+    if (ChecarCodigo.chatId && chatidString !== ChecarCodigo.chatId) {
       await ctx.reply("Esse codigo ja foi registrado por outra pessoa");
       return;
     }
