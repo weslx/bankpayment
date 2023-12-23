@@ -22,7 +22,7 @@ bot.start((ctx) => {
 let EsperandoCodigo = false;
 
 export async function notificar(chatId, texto) {
-  await bot.sendMessage(chatId, texto);
+  await bot.telegram.sendMessage(chatId, texto);
 }
 
 bot.action("CODIGO", (ctx) => {
