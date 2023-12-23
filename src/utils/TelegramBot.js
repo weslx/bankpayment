@@ -1,4 +1,4 @@
-import { Telegraf } from "telegraf";
+import { Telegraf, Markup } from "telegraf";
 import { PrismaClient } from "@prisma/client";
 import dotenv from "dotenv";
 
@@ -13,17 +13,21 @@ bot.telegram.setWebhook(
 
 bot.start((ctx) =>
   ctx.reply(
-    "Bem vindo ao bot de notificaçoes de transaçoes bancarias, escreva /help para ajuda"
+    "Bem vindo ao bot de notificaçoes de transaçoes bancarias, escreva /help para ajuda",
+    Markup.inlineKeyboard([
+      Markup.button.callback("Help", "HELP"),
+      Markup.button.callback("Código", "CODIGO"),
+    ])
   )
 );
 
-bot.help((ctx) =>
+bot.action("HELP", (ctx) =>
   ctx.reply(
     "Para receber notificações de futuras transaçoes, escreva: /codigo (Codigo que voce recebeu do site)"
   )
 );
 
-bot.command("codigo", async (ctx) => {
+bot.action("CODIGO", async (ctx) => {
   const codigo = ctx.message.text.slice("/codigo".length).trim();
 
   const ChecarCodigo = await prisma.infotelegram.findUnique({
