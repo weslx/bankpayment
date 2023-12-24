@@ -46,6 +46,9 @@ class TransferValue {
         .status(400)
         .json("Não é possível transferir dinheiro para o mesmo CPF");
     }
+    if (valor <= 0) {
+      return res.status(400).json("O valor deve ser maior que 0");
+    }
 
     if (UserTransferExiste.infousuario[0].saldo < valor) {
       return res
@@ -73,7 +76,10 @@ class TransferValue {
     ]);
 
     const texto =
-      "Voce acabou de receber uma transferencia no valor de R$" + valor;
+      "Voce acabou de receber uma transferencia no valor de R$" +
+      valor +
+      ", pelo usuario com cpf " +
+      UserTransferExiste.cpf;
 
     const chatid = UserReceberExiste.infotelegram.chatId;
 

@@ -14,8 +14,8 @@ bot.telegram.setWebhook(`${SERVER_URL}/webhook/${TELEGRAM_TOKEN}`);
 
 bot.start((ctx) => {
   ctx.reply(
-    "🎉Bem-vindo ao bot de notificações de transações bancárias!🎉\n\nPor favor, clique no botão 'Código' abaixo e em seguida, insira o código que você recebeu.",
-    Markup.inlineKeyboard([Markup.button.callback("🔑 Código", "CODIGO")])
+    "🚀Bem-vindo ao bot de notificações de transações bancárias!🚀\n\nPor favor, siga as instruções abaixo para começar:\n\n1️⃣ Clique no botão 'Código' abaixo.\n2️⃣ Insira o código que você recebeu.\n\n",
+    Markup.inlineKeyboard([Markup.button.callback("🔑 *Código*", "CODIGO")])
   );
 });
 
