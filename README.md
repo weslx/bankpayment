@@ -36,6 +36,8 @@ Este projeto possui algumas funções, tais como:
 - Depositar dinheiro
 - Atualizar para logista
 - Transferir dinheiro
+- Conectar telegram
+- Notificar usuario no telegram
 Este projeto utiliza o Prisma para a conexão com o banco de dados.
 
 ## 🏁 Iniciando <a name = "iniciando"></a>
@@ -60,6 +62,8 @@ npm i
 Crie uma .env na raiz do projeto e coloque: 
 DATABASE_URL="mysql://USER:PASSWORD@HOST:PORT/DATABASE" dentro dessa string coloque seu banco, dependendo do banco sera necessario alterar o arquivo .prisma/schema.prisma
 JWT_SECRET="" Sua senha de encriptação do jwt
+TELEGRAM_TOKEN= seu token do Bot Father
+SERVER_URL= link do server atual para webhook
 
 O prisma ira mandar o schema para o banco com esse comando
 
@@ -77,15 +81,20 @@ npm run dev
 
 Aqui estão algumas rotas que estão sendo desenvolvidas atualmente:
 
-/criarusuario
-/login
-/depositar
-/mudar-status
-/transferencia
+- `/criarusuario`: Cria um novo usuário.
+- `/login`: Autentica um usuário existente.
+- `/depositar`: Permite que um usuário faça um depósito.
+- `/mudar-status`: Altera o status de um usuário.
+- `/transferencia`: Permite que um usuário faça uma transferência.
+- `/telegram`: Integração com o Telegram.
+  
+## 🚀 Implantação do Telegram <a name = "implantacao"></a>
 
-## 🚀 Implantação <a name = "implantacao"></a>
+1. Crie um bot no Bot Father
+2. Envie o comando `/newbot` e siga as instruções para configurar o nome do bot, etc.
+3. Após a criação do bot, copie a HTTP API fornecida pelo Bot Father.
+4. Cole a HTTP API na variável apropriada no arquivo `.env` do seu projeto.
 
-Em breve, configurações para Vercel.
 
 ## ⛏️ Construído Usando <a name = "construido-usando"></a>
 
