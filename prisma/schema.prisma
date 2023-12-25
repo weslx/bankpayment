@@ -4,9 +4,15 @@ generator client {
   provider = "prisma-client-js"
 }
 
+// datasource db {
+//   provider = "mysql"
+//   url      = env("DATABASE_URL")
+// }
+
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider = "postgresql"
+  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
 model users {
@@ -20,6 +26,7 @@ model users {
   senha String
   status String? @default("Usuario")
   infousuario infousuario[]
+  infotelegram infotelegram?
 }
 
 model infousuario {
@@ -28,4 +35,16 @@ model infousuario {
   saldo Float @default(0)
   user users @relation(fields: [userId], references: [id])
   SessionToken String @unique
+}
+
+model infotelegram {
+  id Int @id @default(autoincrement())
+  chatId String? @unique
+  nome String?
+  sobrenome String?
+  username String?
+  tag String? @unique
+  verificado Int? @default(0)
+  userId Int @unique
+  user users @relation(fields: [userId], references: [id])
 }

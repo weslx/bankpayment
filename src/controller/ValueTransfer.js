@@ -1,19 +1,16 @@
 import { PrismaClient } from "@prisma/client";
-
+import { notificar } from "../utils/TelegramBot.js";
 const prisma = new PrismaClient();
+
 class TransferValue {
   async send(req, res) {
-    const { CpfTransfer, CpfReceber, valor } = req.body;
+    const { token, CpfReceber, valor } = req.body;
 
-    if (CpfTransfer === CpfReceber) {
-      return res
-        .status(400)
-        .json("Não é possível transferir dinheiro para o mesmo CPF");
-    }
+    const idUsuario = token.id;
 
     const UserTransferExiste = await prisma.users.findUnique({
       where: {
-        cpf: CpfTransfer,
+        id: idUsuario,
       },
       include: {
         infousuario: true,
@@ -25,13 +22,12 @@ class TransferValue {
       },
       include: {
         infousuario: true,
+        infotelegram: true,
       },
     });
 
     if (!UserTransferExiste) {
-      return res
-        .status(400)
-        .json("Usuario com este cpf nao existe " + CpfTransfer);
+      return res.status(400).json("Seu usuario nao existe");
     }
 
     if (!UserReceberExiste) {
@@ -40,29 +36,59 @@ class TransferValue {
         .json("Usuario que voce deseja enviar o dinheiro nao existe");
     }
 
+    if (UserTransferExiste.status === "Lojista") {
+      return res
+        .status(400)
+        .json("Este usuario e lojista e nao pode transferir dinheiro");
+    }
+    if (UserTransferExiste.cpf === CpfReceber) {
+      return res
+        .status(400)
+        .json("Não é possível transferir dinheiro para o mesmo CPF");
+    }
+    if (valor <= 0) {
+      return res.status(400).json("O valor deve ser maior que 0");
+    }
+
     if (UserTransferExiste.infousuario[0].saldo < valor) {
       return res
         .status(400)
         .json("Saldo insuficiente para realizar a transferência");
     }
 
-    await prisma.infousuario.update({
-      where: {
-        id: UserTransferExiste.infousuario[0].id,
-      },
-      data: {
-        saldo: UserTransferExiste.infousuario[0].saldo - valor,
-      },
-    });
+    const transferencia = await prisma.$transaction([
+      prisma.infousuario.update({
+        where: {
+          id: UserTransferExiste.infousuario[0].id,
+        },
+        data: {
+          saldo: UserTransferExiste.infousuario[0].saldo - valor,
+        },
+      }),
+      prisma.infousuario.update({
+        where: {
+          id: UserReceberExiste.infousuario[0].id,
+        },
+        data: {
+          saldo: UserReceberExiste.infousuario[0].saldo + valor,
+        },
+      }),
+    ]);
 
-    await prisma.infousuario.update({
-      where: {
-        id: UserReceberExiste.infousuario[0].id,
-      },
-      data: {
-        saldo: UserReceberExiste.infousuario[0].saldo + valor,
-      },
-    });
+    const texto =
+      "Voce acabou de receber uma transferencia no valor de R$" +
+      valor +
+      ", pelo usuario com cpf " +
+      UserTransferExiste.cpf;
+
+    const chatid = UserReceberExiste.infotelegram.chatId;
+
+    await notificar(chatid, texto);
+
+    if (!transferencia) {
+      throw new Error("Falha na transferência");
+    }
+
     return res.status(200).json("Transferência realizada com sucesso");
   }
 }

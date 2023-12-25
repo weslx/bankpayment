@@ -23,7 +23,7 @@ class LoginAccount {
     try {
       if (userExiste.senha === senha) {
         const newToken = jwt.sign({ id: userExiste.id }, JWTSECRET, {
-          expiresIn: 1000,
+          expiresIn: 100000,
         });
 
         await prisma.infousuario.update({

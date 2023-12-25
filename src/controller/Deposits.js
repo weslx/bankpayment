@@ -4,11 +4,13 @@ const prisma = new PrismaClient();
 
 class InfoUsers {
   async store(req, res) {
-    const { cpf, saldo } = req.body;
+    const { saldo, token } = req.body;
+
+    const idUsuario = token.id;
 
     const usuario = await prisma.users.findUnique({
       where: {
-        cpf: cpf,
+        id: idUsuario,
       },
       include: {
         infousuario: true,
