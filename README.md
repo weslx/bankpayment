@@ -59,11 +59,11 @@ Passos para configurar sua aplicação localmente:
 ``` bash
 npm i
 ```
-Crie uma .env na raiz do projeto e coloque: 
-DATABASE_URL="mysql://USER:PASSWORD@HOST:PORT/DATABASE" dentro dessa string coloque seu banco, dependendo do banco sera necessario alterar o arquivo .prisma/schema.prisma
-JWT_SECRET="" Sua senha de encriptação do jwt
-TELEGRAM_TOKEN= seu token do Bot Father
-SERVER_URL= link do server atual para webhook
+- Crie uma .env na raiz do projeto e coloque: 
+- DATABASE_URL="mysql://USER:PASSWORD@HOST:PORT/DATABASE" dentro dessa string coloque seu banco, dependendo do banco sera necessario alterar o arquivo .prisma/schema.prisma
+- JWT_SECRET="" Sua senha de encriptação do jwt
+- TELEGRAM_TOKEN= seu token do Bot Father
+- SERVER_URL= link do server atual para webhook
 
 O prisma ira mandar o schema para o banco com esse comando
 
