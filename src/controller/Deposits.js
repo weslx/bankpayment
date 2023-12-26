@@ -28,7 +28,7 @@ class InfoUsers {
       },
     });
 
-    return res.status(200).json("sucesso");
+    return res.status(200).json("Deposito realizado com sucesso");
   }
 }
 

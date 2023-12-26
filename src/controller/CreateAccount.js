@@ -74,7 +74,7 @@ class CreateAccount {
         },
       });
 
-      return res.status(200).json({ message: "Usuario Criado", token });
+      return res.status(201).json({ message: "Usuario Criado", token });
     } catch (error) {
       return res.status(400).json(error);
     } finally {

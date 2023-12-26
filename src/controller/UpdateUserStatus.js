@@ -22,8 +22,9 @@ class UserStatus {
       });
       return res.status(200).json({
         message:
-          "Parabens voce atualizou o seu status de usuario para " +
-          usuarioAtualizado.status,
+          "Parabéns voce atualizou o seu status de usuario para " +
+          usuarioAtualizado.status +
+          ". Apartir de agora voce so pode receber transaçoes",
       });
     } catch (error) {
       return res.status(400).json(error);

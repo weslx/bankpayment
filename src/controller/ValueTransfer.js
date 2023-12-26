@@ -43,7 +43,7 @@ class TransferValue {
     }
     if (UserTransferExiste.cpf === CpfReceber) {
       return res
-        .status(400)
+        .status(409)
         .json("Não é possível transferir dinheiro para o mesmo CPF");
     }
     if (valor <= 0) {

@@ -17,7 +17,7 @@ class LoginAccount {
       },
     });
     if (!userExiste) {
-      res.status(400).json("Email nao existe");
+      res.status(400).json("Email não existe");
     }
 
     try {
@@ -36,7 +36,7 @@ class LoginAccount {
         });
 
         res.setHeader("Authorization", newToken);
-        return res.status(200).json("logado com sucesso");
+        return res.status(200).json("Logado com sucesso");
       } else {
         return res.status(400).json("Senha incorreta");
       }

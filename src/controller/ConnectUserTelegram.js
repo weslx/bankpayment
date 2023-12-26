@@ -20,7 +20,7 @@ class ConnectTelegram {
       },
     });
     if (!userExiste) {
-      res.status(400).json("Usuario nao encontrado");
+      res.status(400).json("Verifique seu usuario");
     }
 
     const tagExiste = userExiste.infotelegram.tag;
@@ -37,7 +37,7 @@ class ConnectTelegram {
     res
       .status(200)
       .json(
-        "Seu token para conexão no telegram foi gerado, digite no telegram: /codigo " +
+        "Seu token para conexão no telegram foi gerado, digite no telegram:" +
           codigo
       );
   }
