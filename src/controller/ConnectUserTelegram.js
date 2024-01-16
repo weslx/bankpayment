@@ -1,7 +1,5 @@
-import { PrismaClient } from "@prisma/client";
+import prisma from "../client.js";
 import generateCode from "../utils/GenerateTelegramCode.js";
-
-const prisma = new PrismaClient();
 
 class ConnectTelegram {
   async connect(req, res) {

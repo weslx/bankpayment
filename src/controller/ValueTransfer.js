@@ -1,6 +1,5 @@
-import { PrismaClient } from "@prisma/client";
+import prisma from "../client.js";
 import { notificar } from "../utils/TelegramBot.js";
-const prisma = new PrismaClient();
 
 class TransferValue {
   async send(req, res) {

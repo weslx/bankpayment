@@ -1,8 +1,6 @@
-import { PrismaClient } from "@prisma/client";
+import prisma from "../client.js";
 import jwt from "jsonwebtoken";
 const JWTSECRET = process.env.JWT_SECRET;
-
-const prisma = new PrismaClient();
 
 class LoginAccount {
   async login(req, res) {

@@ -1,9 +1,7 @@
 import * as Yup from "yup";
-import { PrismaClient } from "@prisma/client";
+import prisma from "../client.js";
 import jwt from "jsonwebtoken";
 const JWTSECRET = process.env.JWT_SECRET;
-
-const prisma = new PrismaClient();
 
 class CreateAccount {
   async store(req, res) {

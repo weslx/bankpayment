@@ -1,7 +1,4 @@
-import { PrismaClient } from "@prisma/client";
-import * as Yup from "yup";
-
-const prisma = new PrismaClient();
+import prisma from "../client.js";
 
 class UserStatus {
   async update(req, res) {
